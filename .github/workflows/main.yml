@@ -1,11 +1,11 @@
 name: Build Hawwil APK
 
 env:
-  APP_URL: https://hawwil.github.io/hawwil-test/
-  ICON_URL: https://hawwil.github.io/hawwil-test/test-192.png
-  APP_NAME: حوّل (تجريبي)
-  APP_ID: com.nexa.hawwil.test
-  APK_NAME: Hawwil-Test.apk
+  APP_URL: https://hawwil.github.io/
+  ICON_URL: https://hawwil.github.io/icon-v3-192.png
+  APP_NAME: حوّل
+  APP_ID: com.nexa.hawwil
+  APK_NAME: Hawwil.apk
 
 on:
   push:
@@ -31,6 +31,8 @@ jobs:
           gradle-version: '8.9'
 
       - name: Generate Android project
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
         run: |
           set -e
           mkdir -p proj/app/src/main/java/com/nexa/hawwil proj/app/src/main/res/mipmap-xxxhdpi
@@ -214,7 +216,7 @@ jobs:
           }
           EOF
           curl -fsSL "$ICON_URL" -o app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-          keytool -genkeypair -keystore app/app.keystore -storetype PKCS12 -alias hawwil -keyalg RSA -keysize 2048 -validity 10000 -storepass hawwil123 -keypass hawwil123 -dname "CN=Hawwil, O=NEXA, C=PS"
+          echo "$KEYSTORE_B64" | base64 -d > app/app.keystore
           sed -i "s|__APP_URL__|$APP_URL|g" app/src/main/java/com/nexa/hawwil/MainActivity.java
           sed -i "s|__APP_NAME__|$APP_NAME|g" app/src/main/AndroidManifest.xml
           sed -i "s|__APP_ID__|$APP_ID|g; s|__VCODE__|$GITHUB_RUN_NUMBER|g" app/build.gradle
@@ -229,7 +231,7 @@ jobs:
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.run_number }}
-          name: Hawwil v${{ github.run_number }}
+          tag_name: app-v${{ github.run_number }}
+          name: حوّل v${{ github.run_number }}
           files: ${{ env.APK_NAME }}
           make_latest: true
