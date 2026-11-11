@@ -1,8 +1,8 @@
 name: Build Hawwil APK
 
 env:
-  APP_URL: https://hawwil.github.io/
-  ICON_URL: https://hawwil.github.io/icon-v3-192.png
+  APP_URL: https://hawwil.nexa-ps.com/
+  ICON_URL: https://hawwil.nexa-ps.com/icon-v3-192.png
   APP_NAME: حوّل
   APP_ID: com.nexa.hawwil
   APK_NAME: Hawwil.apk
@@ -142,7 +142,7 @@ jobs:
 
           public class MainActivity extends Activity {
               private static final String HOME = "__APP_URL__";
-              private static final String HOST = "hawwil.github.io";
+              private static final String HOST = "hawwil.nexa-ps.com";
               private WebView web;
 
               @Override
